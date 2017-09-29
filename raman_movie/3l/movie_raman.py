@@ -61,8 +61,12 @@ colori = {'aprime1':'lightblue',
           'aprime3':'salmon'}
 colorp = {'aprime1':'darkblue',
           'aprime3':'darkred'}
-label = {'aprime1':'$\\alpha^{\\rm xx}_\\mathbf{k}$ A$^\prime_1$',
-         'aprime3':'$\\alpha^{\\rm xx}_\\mathbf{k}$ A$^\prime_3$'}
+label = {'aprime1':'$\\alpha^{\\rm xx}_\\mathbf{k}$ A$^\prime_1$ $E_L = %5.2lf$ eV',
+         'aprime3':'$\\alpha^{\\rm xx}_\\mathbf{k}$ A$^\prime_3$ $E_L = %5.2lf$ eV'}
+
+labelr = {'aprime1':'$\\alpha^{\\rm xx}_\\mathbf{k}$ A$^\prime_1$',
+          'aprime3':'$\\alpha^{\\rm xx}_\\mathbf{k}$ A$^\prime_3$'}
+
 
 fig = plt.figure(figsize=(25,8))
 d = 0.08
@@ -148,7 +152,7 @@ for ne,e in enumerate(energies):
         y = 0.05
         print x, y
         ax = plt.axes([x,y,width,height])
-        plt.title(label[mode])
+        plt.title(label[mode]%e)
 
         intensities = raman_mode[mode]['intensity']
         #phases = raman_mode[mode]['phase']
@@ -175,10 +179,14 @@ for ne,e in enumerate(energies):
         raman = raman.real**2+raman.imag**2
 
         ax = plt.axes([.65,0.1,.3,.8])
-        plt.plot(energies,raman)
+        plt.plot(energies,raman,label=labelr[mode])
         plt.axvline(e)
         plt.xlim(0,2.5)
         plt.xlabel('$E_L$ (eV)')
+        ax = plt.gca()
+        ax.yaxis.set_major_formatter(plt.NullFormatter())
+
+        plt.legend(frameon=False)
 
     plt.savefig('ramanbz_e%03d.pdf'%ne,dpi=200)
     plt.clf()
